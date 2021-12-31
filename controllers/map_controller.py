@@ -57,7 +57,7 @@ class MapController:
                     pos = self._game.mouse.get_pos()
                     x = int(pos[0] / self._display._cell_width)
                     y = int(pos[1] / self._display._cell_height)
-                    self._grid[y][x].disabled = True
+                    self._grid[y][x].click()
 
 
 

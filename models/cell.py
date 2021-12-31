@@ -6,7 +6,6 @@ class Cell:
         self.end = end
         self.disabled = disabled
         
-
     @property
     def x(self):
         return self._x
@@ -14,3 +13,21 @@ class Cell:
     @property
     def y(self):
         return self._y
+
+    def click(self):
+        if self.disabled:
+            self.disabled = False
+            self.start = True
+            self.end = False
+        elif self.start:
+            self.disabled = False
+            self.start = False
+            self.end = True
+        elif self.end:
+            self.disabled = False
+            self.start = False
+            self.end = False
+        else:
+            self.disabled = True
+            self.start = False
+            self.end = False
