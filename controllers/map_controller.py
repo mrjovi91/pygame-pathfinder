@@ -18,8 +18,8 @@ class MapController:
         self._end = False
         self._clock = self._game.time.Clock()
         
-        self.rows = 15
-        self.columns = 15
+        self.rows = settings['rows']
+        self.columns = settings['columns']
         self._grid = []
         for y in range(0, self.rows):
             row = []
@@ -27,7 +27,7 @@ class MapController:
                 row.append(Cell(x, y))
             self._grid.append(row)
 
-        self._display = MapView(self._game, "Path Finder", 600, 600, self.rows, self.columns)
+        self._display = MapView(self._game, "Path Finder", settings['width'], settings['height'], self.rows, self.columns)
 
 
     def run(self):
@@ -40,18 +40,19 @@ class MapController:
                         self._run = False
                     elif event.type == self._game.MOUSEBUTTONUP:
                         pos = self._game.mouse.get_pos()
-                        x = int(pos[0] / self._display._cell_width)
-                        y = int(pos[1] / self._display._cell_height)
-                        old_state, new_state = self._grid[y][x].click(self._start, self._end)
-                        if old_state == 'start':
-                            self._start = False
-                        elif old_state == 'end':
-                            self._end = False
+                        if not pos[1] > settings['height']:
+                            x = int(pos[0] / self._display._cell_width)
+                            y = int(pos[1] / self._display._cell_height)
+                            old_state, new_state = self._grid[y][x].click(self._start, self._end)
+                            if old_state == 'start':
+                                self._start = False
+                            elif old_state == 'end':
+                                self._end = False
 
-                        if new_state == 'start':
-                            self._start = True
-                        elif new_state == 'end':
-                            self._end = True
+                            if new_state == 'start':
+                                self._start = True
+                            elif new_state == 'end':
+                                self._end = True
                 
             else:
                 for event in self._game.event.get():

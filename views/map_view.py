@@ -24,5 +24,8 @@ class MapView:
                 elif cell.disabled:
                     self._game.draw.rect(self._window, BLACK, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
                 else:
-                    self._game.draw.rect(self._window, BLACK, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height), 1)  
+                    self._game.draw.rect(self._window, BLACK, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height), 1)
+        if phase == 'Drawing':
+            self._game.draw.rect(self._window, GREEN, self._game.Rect(self._columns/3 * self._cell_width, self._height + 25, self._cell_width * 5, self._cell_height))
+            self._game.draw.rect(self._window, BLACK, self._game.Rect(self._columns/3 * self._cell_width, self._height + 25, self._cell_width * 5, self._cell_height), 1)
         self._game.display.update()
