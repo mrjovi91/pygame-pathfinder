@@ -13,6 +13,7 @@ class MapController:
         self._game = pygame
         self._run = True
         self._start = False
+        self._end = False
         self._clock = self._game.time.Clock()
         
         self.rows = 15
@@ -57,7 +58,20 @@ class MapController:
                     pos = self._game.mouse.get_pos()
                     x = int(pos[0] / self._display._cell_width)
                     y = int(pos[1] / self._display._cell_height)
-                    self._grid[y][x].click()
+                    old_state, new_state = self._grid[y][x].click(self._start, self._end)
+                    if old_state == 'start':
+                        self._start = False
+                    elif old_state == 'end':
+                        self._end = False
+
+                    if new_state == 'start':
+                        self._start = True
+                    elif new_state == 'end':
+                        self._end = True
+
+                    print(f'Start: {self._start}\nEnd: {self._end}')
+                    print(f'({old_state}, {new_state})')
+                    print()
 
 
 
