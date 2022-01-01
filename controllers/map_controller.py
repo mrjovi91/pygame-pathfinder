@@ -20,6 +20,10 @@ class MapController:
         
         self.rows = settings['rows']
         self.columns = settings['columns']
+        self._cell_width = settings['width'] / self.columns
+        self._cell_height = settings['height'] / self.rows
+        self._run_button_coordinates = (self.columns/3 * self._cell_width, settings['height'] + settings['menu_height']/4, self._cell_width * self.columns/3, self._cell_height)
+
         self._grid = []
         for y in range(0, self.rows):
             row = []
@@ -27,7 +31,8 @@ class MapController:
                 row.append(Cell(x, y))
             self._grid.append(row)
 
-        self._display = MapView(self._game, "Path Finder", settings['width'], settings['height'], self.rows, self.columns)
+        self._display = MapView(self._game, "Path Finder", settings['width'], settings['height'], self.rows, self.columns,self._run_button_coordinates)
+        self._game.init()
 
 
     def run(self):
@@ -40,7 +45,10 @@ class MapController:
                         self._run = False
                     elif event.type == self._game.MOUSEBUTTONUP:
                         pos = self._game.mouse.get_pos()
-                        if not pos[1] > settings['height']:
+                        if pos[1] > settings['height']:
+                            if self._start and self._end and (pos[0] > self._run_button_coordinates[0]) and (pos[0] < self._run_button_coordinates[0] + self._run_button_coordinates[2]) and (pos[1] > self._run_button_coordinates[1]) and (pos[1] <  self._run_button_coordinates[1] + self._run_button_coordinates[3]):
+                                self._phase = "Generate Path"
+                        else:
                             x = int(pos[0] / self._display._cell_width)
                             y = int(pos[1] / self._display._cell_height)
                             old_state, new_state = self._grid[y][x].click(self._start, self._end)
@@ -53,7 +61,6 @@ class MapController:
                                 self._start = True
                             elif new_state == 'end':
                                 self._end = True
-                
             else:
                 for event in self._game.event.get():
                     if event.type == self._game.QUIT:
