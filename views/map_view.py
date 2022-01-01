@@ -12,7 +12,7 @@ class MapView:
         self._cell_width = width / columns
         self._cell_height = height / rows
         
-    def refresh(self, grid):
+    def refresh(self, phase, grid):
         self._window.fill(WHITE)
         for y, row in enumerate(grid):
             for x, column in enumerate(row):

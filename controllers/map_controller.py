@@ -12,6 +12,8 @@ class MapController:
     def __init__(self):
         self._game = pygame
         self._run = True
+        self._phase = 'Drawing'
+
         self._start = False
         self._end = False
         self._clock = self._game.time.Clock()
@@ -25,55 +27,36 @@ class MapController:
                 row.append(Cell(x, y))
             self._grid.append(row)
 
-        # self._snake = [[int(self.rows/2), int(self.columns/2)]]
-        # self._grid[self._snake[0][0]][self._snake[0][1]].head = True
-        # self._direction = 'right'
-        # self._sleep = 0.25
-
-        # self.determine_new_food()
-
         self._display = MapView(self._game, "Path Finder", 600, 600, self.rows, self.columns)
 
-    # def determine_new_food(self):
-    #     while True:
-    #         new_food = random.choice(random.choice(self._grid))
-    #         if not new_food.body and not new_food.head and not (new_food.x <= 0 or new_food.y <= 0 or new_food.x >= self.columns -1 or new_food.y >= self.rows - 1):
-    #             new_food.food = True
-    #             break
 
     def run(self):
         while self._run:
-            self._display.refresh(self._grid)
+            self._display.refresh(self._phase, self._grid)
             self._clock.tick(settings['fps'])
-            # if len(self._snake) % 5 == 0:
-            #     if self._sleep <= 0.05:
-            #         self._sleep = 0.05
-            #     else:
-            #         self._sleep /= 1.01
-            # sleep(self._sleep)
-            for event in self._game.event.get():
-                if event.type == self._game.QUIT:
-                    self._run = False
-                elif event.type == self._game.MOUSEBUTTONUP:
-                    pos = self._game.mouse.get_pos()
-                    x = int(pos[0] / self._display._cell_width)
-                    y = int(pos[1] / self._display._cell_height)
-                    old_state, new_state = self._grid[y][x].click(self._start, self._end)
-                    if old_state == 'start':
-                        self._start = False
-                    elif old_state == 'end':
-                        self._end = False
+            if self._phase == 'Drawing':
+                for event in self._game.event.get():
+                    if event.type == self._game.QUIT:
+                        self._run = False
+                    elif event.type == self._game.MOUSEBUTTONUP:
+                        pos = self._game.mouse.get_pos()
+                        x = int(pos[0] / self._display._cell_width)
+                        y = int(pos[1] / self._display._cell_height)
+                        old_state, new_state = self._grid[y][x].click(self._start, self._end)
+                        if old_state == 'start':
+                            self._start = False
+                        elif old_state == 'end':
+                            self._end = False
 
-                    if new_state == 'start':
-                        self._start = True
-                    elif new_state == 'end':
-                        self._end = True
-
-                    print(f'Start: {self._start}\nEnd: {self._end}')
-                    print(f'({old_state}, {new_state})')
-                    print()
-
-
+                        if new_state == 'start':
+                            self._start = True
+                        elif new_state == 'end':
+                            self._end = True
+                
+            else:
+                for event in self._game.event.get():
+                    if event.type == self._game.QUIT:
+                        self._run = False
 
             # keys_pressed = self._game.key.get_pressed()
             # if keys_pressed[self._game.K_w] and self._direction is not 'down':

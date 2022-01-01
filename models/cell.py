@@ -17,26 +17,22 @@ class Cell:
 
     def click(self, start_is_set, end_is_set):
         old_state = self.state
-        if start_is_set and end_is_set:
+
+        if start_is_set:
             if self.disabled:
+                self.state = 'start'
+                self.disabled = False
+                self.start = True
+                self.end = False
+
+        if end_is_set:
+            if self.start:
                 self.state = 'end'
                 self.disabled = False
                 self.start = False
                 self.end = True
-        else:
-            if end_is_set:
-                if self.start:
-                    self.state = 'end'
-                    self.disabled = False
-                    self.start = False
-                    self.end = True
 
-            if start_is_set:
-                if self.disabled:
-                    self.state = 'start'
-                    self.disabled = False
-                    self.start = True
-                    self.end = False
+        
 
 
         if self.disabled:
