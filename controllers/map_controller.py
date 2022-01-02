@@ -2,6 +2,7 @@ from settings import settings
 from views.map_view import MapView
 from models.cell import Cell
 from strategy.a_star_path_finding import AStarPathFindingStrategy
+from strategy.dijkstra_path_finding import DijkstraPathFindingStrategy
 
 import pygame
 from pygame.locals import *
@@ -53,7 +54,7 @@ class MapController:
                         if pos[1] > settings['height']:
                             if self._start and self._end and (pos[0] > self._run_button_coordinates[0]) and (pos[0] < self._run_button_coordinates[0] + self._run_button_coordinates[2]) and (pos[1] > self._run_button_coordinates[1]) and (pos[1] <  self._run_button_coordinates[1] + self._run_button_coordinates[3]):
                                 self._phase = "Generate Path"
-                                self._path_finding_strategy = AStarPathFindingStrategy(self._grid, self._start, self._end)
+                                self._path_finding_strategy = DijkstraPathFindingStrategy(self._grid, self._start, self._end)
                         else:
                             x = int(pos[0] / self._display._cell_width)
                             y = int(pos[1] / self._display._cell_height)
