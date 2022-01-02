@@ -19,7 +19,7 @@ class Cell:
         old_state = self.state
 
         if start_is_set:
-            if self.disabled:
+            if self.state is None:
                 self.state = 'start'
                 self.disabled = False
                 self.start = True
@@ -32,27 +32,25 @@ class Cell:
                 self.start = False
                 self.end = True
 
-        
-
-
-        if self.disabled:
-            self.state = 'start'
-            self.disabled = False
-            self.start = True
-            self.end = False
-        elif self.start:
+        if self.start:
             self.state = 'end'
             self.disabled = False
             self.start = False
             self.end = True
         elif self.end:
+            self.state = 'disabled'
+            self.disabled = True
+            self.start = False
+            self.end = False
+        elif self.disabled:
             self.state = None
             self.disabled = False
             self.start = False
             self.end = False
         else:
-            self.state = 'disabled'
-            self.disabled = True
-            self.start = False
+            self.state = 'start'
+            self.disabled = False
+            self.start = True
             self.end = False
+
         return old_state, self.state

@@ -12,9 +12,17 @@ class MapView:
         self._cell_width = width / columns
         self._cell_height = height / rows
         self._run_button_coordinates = run_button_coordinates
+        self._game.init()
+        self._font =  self._game.font.Font(self._game.font.get_default_font(), 36)
+
+    def _render_run_button(self):
+        self._game.draw.rect(self._window, GREEN, self._game.Rect(self._run_button_coordinates[0], self._run_button_coordinates[1], self._run_button_coordinates[2], self._run_button_coordinates[3]))
+        self._game.draw.rect(self._window, BLACK, self._game.Rect(self._run_button_coordinates[0], self._run_button_coordinates[1], self._run_button_coordinates[2], self._run_button_coordinates[3]), 1)
         
-    def refresh(self, phase, grid):
-        self._window.fill(WHITE)
+        text_surface = self._font.render('Start', True, WHITE)
+        self._window.blit(text_surface, dest=(self._run_button_coordinates[0] + self._run_button_coordinates[2]/3.5, self._run_button_coordinates[1]))
+
+    def _render_cells(self, grid):
         for y, row in enumerate(grid):
             for x, column in enumerate(row):
                 cell = column
@@ -26,11 +34,11 @@ class MapView:
                     self._game.draw.rect(self._window, BLACK, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
                 else:
                     self._game.draw.rect(self._window, BLACK, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height), 1)
+        
+    def refresh(self, phase, grid):
+        self._window.fill(WHITE)
+        self._render_cells(grid)
         if phase == 'Drawing':
-            self._game.draw.rect(self._window, GREEN, self._game.Rect(self._run_button_coordinates[0], self._run_button_coordinates[1], self._run_button_coordinates[2], self._run_button_coordinates[3]))
-            self._game.draw.rect(self._window, BLACK, self._game.Rect(self._run_button_coordinates[0], self._run_button_coordinates[1], self._run_button_coordinates[2], self._run_button_coordinates[3]), 1)
-            font = self._game.font.Font(self._game.font.get_default_font(), 36)
-            text_surface = font.render('Start', True, WHITE)
-            self._window.blit(text_surface, dest=(self._run_button_coordinates[0] + self._run_button_coordinates[2]/3.5, self._run_button_coordinates[1]))
+            self._render_run_button()
 
         self._game.display.update()

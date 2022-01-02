@@ -32,7 +32,6 @@ class MapController:
             self._grid.append(row)
 
         self._display = MapView(self._game, "Path Finder", settings['width'], settings['height'], self.rows, self.columns,self._run_button_coordinates)
-        self._game.init()
 
 
     def run(self):
