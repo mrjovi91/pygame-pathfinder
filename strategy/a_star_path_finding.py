@@ -84,7 +84,6 @@ class AStarPathFindingStrategy(PathFindingStrategy):
     def render(self):
         self._turn_past_neighbour_to_computed()
         neighbours = self.get_visitable_neighbours()
-        print(neighbours)
         for neighbour in neighbours:
             temp_g_score = self._current.g + AStarPathFindingStrategy.DISTANCE_BETWEEN_CELLS
             if temp_g_score < neighbour.g:
@@ -100,7 +99,6 @@ class AStarPathFindingStrategy(PathFindingStrategy):
                     self._closed_set.append(neighbour)
 
     def render_completed(self):
-        print(list(self._open_set.queue))
         if self._open_set.empty():
             return True
         

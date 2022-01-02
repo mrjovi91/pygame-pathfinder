@@ -53,8 +53,6 @@ class MapController:
                         if pos[1] > settings['height']:
                             if self._start and self._end and (pos[0] > self._run_button_coordinates[0]) and (pos[0] < self._run_button_coordinates[0] + self._run_button_coordinates[2]) and (pos[1] > self._run_button_coordinates[1]) and (pos[1] <  self._run_button_coordinates[1] + self._run_button_coordinates[3]):
                                 self._phase = "Generate Path"
-                                print(f'Start: {self._start}')
-                                print(f'End: {self._end}')
                                 self._path_finding_strategy = AStarPathFindingStrategy(self._grid, self._start, self._end)
                         else:
                             x = int(pos[0] / self._display._cell_width)
