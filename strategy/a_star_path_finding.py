@@ -65,6 +65,9 @@ class AStarPathFindingStrategy(PathFindingStrategy):
                 if attempted_cell.cell.disabled:
                     continue
 
+
+                if attempted_cell.cell.neighbour:
+                    attempted_cell.cell.computed = True
                 attempted_cell.cell.neighbour = True
                 neighbours.append(attempted_cell)
                 
@@ -73,16 +76,16 @@ class AStarPathFindingStrategy(PathFindingStrategy):
 
         return neighbours
         
-    def _turn_past_neighbour_to_computed(self):
-        for row in self._grid:
-            for column in row:
-                cell = column.cell
-                if cell.neighbour:
-                    cell.neighbour = False
-                    cell.computed = True
+    # def _turn_past_neighbour_to_computed(self):
+    #     for row in self._grid:
+    #         for column in row:
+    #             cell = column.cell
+    #             if cell.neighbour:
+    #                 cell.neighbour = False
+    #                 cell.computed = True
 
     def render(self):
-        self._turn_past_neighbour_to_computed()
+        # self._turn_past_neighbour_to_computed()
         neighbours = self.get_visitable_neighbours()
         for neighbour in neighbours:
             temp_g_score = self._current.g + AStarPathFindingStrategy.DISTANCE_BETWEEN_CELLS

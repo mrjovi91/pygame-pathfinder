@@ -78,7 +78,7 @@ class MapController:
                     continue
 
                 self._path_finding_strategy.render()
-                sleep(0.125)
+                # sleep(0.125)
                 
                 
             elif self._phase == 'Display Path':

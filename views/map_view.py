@@ -31,19 +31,17 @@ class MapView:
                     cell = column.cell
 
                 if cell.start:
-                    self._game.draw.rect(self._window, PURPLE, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
+                    self._game.draw.rect(self._window, GREEN, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
                 elif cell.end:
-                    self._game.draw.rect(self._window, RED, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
+                    self._game.draw.rect(self._window, PURPLE, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
                 elif cell.disabled:
                     self._game.draw.rect(self._window, BLACK, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
                 elif cell.path:
-                    self._game.draw.rect(self._window, YELLOW, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
-                elif cell.current:
-                    self._game.draw.rect(self._window, GREEN, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
-                elif cell.neighbour:
                     self._game.draw.rect(self._window, ORANGE, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
                 elif cell.computed:
                     self._game.draw.rect(self._window, BLUE, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
+                elif cell.neighbour:
+                    self._game.draw.rect(self._window, RED, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height))
 
                 self._game.draw.rect(self._window, BLACK, self._game.Rect(x*self._cell_width, y*self._cell_height, self._cell_width, self._cell_height), 1)
                 
