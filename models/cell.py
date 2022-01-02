@@ -5,6 +5,10 @@ class Cell:
         self.start = start
         self.end = end
         self.disabled = disabled
+        self.path = False
+        self.current = False
+        self.neighbour = False
+        self.computed = False
         self.state = None
         
     @property

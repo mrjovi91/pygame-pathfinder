@@ -1,6 +1,7 @@
 from settings import settings
 from views.map_view import MapView
 from models.cell import Cell
+from strategy.a_star_path_finding import AStarPathFindingStrategy
 
 import pygame
 from pygame.locals import *
@@ -14,8 +15,8 @@ class MapController:
         self._run = True
         self._phase = 'Drawing'
 
-        self._start = False
-        self._end = False
+        self._start = None
+        self._end = None
         self._clock = self._game.time.Clock()
         
         self.rows = settings['rows']
@@ -32,12 +33,17 @@ class MapController:
             self._grid.append(row)
 
         self._display = MapView(self._game, "Path Finder", settings['width'], settings['height'], self.rows, self.columns,self._run_button_coordinates)
+        self._path_finding_strategy = None
 
 
     def run(self):
         while self._run:
-            self._display.refresh(self._phase, self._grid)
+            if self._path_finding_strategy is None:
+                self._display.refresh(self._phase, self._grid)
+            else:
+                self._display.refresh(self._phase, self._path_finding_strategy._grid)
             self._clock.tick(settings['fps'])
+
             if self._phase == 'Drawing':
                 for event in self._game.event.get():
                     if event.type == self._game.QUIT:
@@ -47,23 +53,50 @@ class MapController:
                         if pos[1] > settings['height']:
                             if self._start and self._end and (pos[0] > self._run_button_coordinates[0]) and (pos[0] < self._run_button_coordinates[0] + self._run_button_coordinates[2]) and (pos[1] > self._run_button_coordinates[1]) and (pos[1] <  self._run_button_coordinates[1] + self._run_button_coordinates[3]):
                                 self._phase = "Generate Path"
+                                self._path_finding_strategy = AStarPathFindingStrategy(self._grid, self._start, self._end)
                         else:
                             x = int(pos[0] / self._display._cell_width)
                             y = int(pos[1] / self._display._cell_height)
                             old_state, new_state = self._grid[y][x].click(self._start, self._end)
                             if old_state == 'start':
-                                self._start = False
+                                self._start = None
                             elif old_state == 'end':
-                                self._end = False
+                                self._end = None
 
                             if new_state == 'start':
-                                self._start = True
+                                self._start = [x,y]
                             elif new_state == 'end':
-                                self._end = True
+                                self._end = [x,y]
+
+            elif self._phase == 'Generate Path':
+                for event in self._game.event.get():
+                    if event.type == self._game.QUIT:
+                        self._run = False
+
+                if self._path_finding_strategy.render_completed():
+                    self._phase = 'Display Path'
+                    continue
+
+                self._path_finding_strategy.render()
+                # sleep(0.125)
+                
+                
+            elif self._phase == 'Display Path':
+                for event in self._game.event.get():
+                    if event.type == self._game.QUIT:
+                        self._run = False
+                self._path_finding_strategy.display_path()
+                self._display.refresh(self._phase, self._path_finding_strategy._grid)
+                self._clock.tick(settings['fps'])
+
+                if self._path_finding_strategy.display_path_completed():
+                    self._phase = 'Completed'
+
             else:
                 for event in self._game.event.get():
                     if event.type == self._game.QUIT:
                         self._run = False
+                
 
             # keys_pressed = self._game.key.get_pressed()
             # if keys_pressed[self._game.K_w] and self._direction is not 'down':
